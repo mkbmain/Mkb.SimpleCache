@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("Tests")]
 
-namespace Mkb.CacheItSimple
+namespace Mkb
 {
-    public static class Cache
+    public static class CacheItSimple
     {
         internal static Dictionary<string, CacheData> _cache = new Dictionary<string, CacheData>();
 
