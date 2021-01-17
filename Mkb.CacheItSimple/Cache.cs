@@ -20,7 +20,6 @@ namespace Mkb.CacheItSimple
             return Run(magicName, func, ttl, exp);
         }
         
-        
         private static string MagicName(string callingAssembly)
         {
             var details = (new System.Diagnostics.StackTrace()).GetFrame(2);
@@ -37,7 +36,7 @@ namespace Mkb.CacheItSimple
                 {
                     lock (basicAsync)
                     {
-                        value.KillTime = DateTime.Now.AddSeconds(ttl);
+                        value.KillTime = DateTimeOffset.Now.AddSeconds(ttl);
                         value.Data = func.Invoke();
                     }
                 }
@@ -47,7 +46,7 @@ namespace Mkb.CacheItSimple
 
             value = new CacheData
             {
-                KillTime = DateTime.Now.AddSeconds(ttl),
+                KillTime = DateTimeOffset.Now.AddSeconds(ttl),
                 Data = func.Invoke()
             };
             if (exp == null || exp.Invoke((T) value.Data))
@@ -65,6 +64,6 @@ namespace Mkb.CacheItSimple
     internal class CacheData
     {
         public object Data { get; set; }
-        public DateTime KillTime { get; set; }
+        public DateTimeOffset KillTime { get; set; }
     }
 }

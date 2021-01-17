@@ -1,11 +1,9 @@
-using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
 {
-    public class UnitTest1
+    public class CacheTests
     {
         [Fact]
         public void Assert_returns_cache()
@@ -35,7 +33,7 @@ namespace Tests
             string g = "f";
             var r = Mkb.CacheItSimple.Cache.Run(() => $"{g}t", 33);
 
-            Assert.True(Mkb.CacheItSimple.Cache._cache.ContainsKey($"Tests.{nameof(UnitTest1)}.{nameof(Assert_magic_string_connect)}"));
+            Assert.True(Mkb.CacheItSimple.Cache._cache.ContainsKey($"Tests.{nameof(CacheTests)}.{nameof(Assert_magic_string_connect)}"));
         }
 
         [Fact]
