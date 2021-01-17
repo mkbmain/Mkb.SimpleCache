@@ -1,22 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+
+[assembly: InternalsVisibleTo("Tests")]
 
 namespace Mkb.CacheItSimple
 {
     public static class Cache
     {
-        private static Dictionary<string, CacheData> _cache = new Dictionary<string, CacheData>();
+        internal static Dictionary<string, CacheData> _cache = new Dictionary<string, CacheData>();
 
         private static object basicAsync = new object();
 
-        public static object Run(Func<object> func, int ttl)
+        public static T Run<T>(Func<T> func, int ttl,Func<T,bool> exp = null)
         {
-            var details = (new System.Diagnostics.StackTrace()).GetFrame(1);
+            var magicName = MagicName(Assembly.GetCallingAssembly().GetName().Name);
+            return Run(magicName, func, ttl, exp);
+        }
+        
+        
+        private static string MagicName(string callingAssembly)
+        {
+            var details = (new System.Diagnostics.StackTrace()).GetFrame(2);
             var method = details.GetMethod();
-            var calling = Assembly.GetCallingAssembly().GetName();
-            var magicName = $"{calling.Name}.{method.ReflectedType?.Name??""}.{ method.Name}";
+            var magicName = $"{callingAssembly}.{method.ReflectedType?.Name ?? ""}.{method.Name}";
+            return magicName;
+        }
 
+        private static T Run<T>(string magicName, Func<T> func, int ttl, Func<T, bool> exp)
+        {
             if (_cache.TryGetValue(magicName, out var value))
             {
                 if (value.KillTime < DateTime.Now)
@@ -28,7 +42,7 @@ namespace Mkb.CacheItSimple
                     }
                 }
 
-                return value.Data;
+                return (T) value.Data;
             }
 
             value = new CacheData
@@ -36,12 +50,15 @@ namespace Mkb.CacheItSimple
                 KillTime = DateTime.Now.AddSeconds(ttl),
                 Data = func.Invoke()
             };
-            lock (basicAsync)
+            if (exp == null || exp.Invoke((T) value.Data))
             {
-                _cache.Add(magicName, value);
+                lock (basicAsync)
+                {
+                    _cache.Add(magicName, value);
+                }
             }
 
-            return value.Data;
+            return (T) value.Data;
         }
     }
 
