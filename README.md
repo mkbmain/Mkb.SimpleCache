@@ -6,7 +6,7 @@ This little library allows you to call it parsing a function.
 ```c#
 public IactionResult GetDbEntitys()
 {
-    Mkb.CacheItSimple.Cache.Run(() =>
+    Mkb.CacheItSimple.Run(() =>
     {
        // what ever                      // full function
        return someSeriveToDb();
