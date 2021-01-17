@@ -13,6 +13,7 @@ namespace Tests
             var b = Mkb.CacheItSimple.Cache.Run(() => $"{g}e", 180);
             Assert.Equal("ft", b);
             Assert.Equal(r, b);
+            
         }
         
         [Fact]

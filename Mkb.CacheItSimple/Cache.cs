@@ -14,10 +14,18 @@ namespace Mkb.CacheItSimple
 
         private static object basicAsync = new object();
 
-        public static T Run<T>(Func<T> func, int ttl,Func<T,bool> exp = null)
+        /// <summary>
+        /// will check cache and return cache version if it exists and still fresh else will execute function and store it in cache for next time with a ttl specified 
+        /// </summary>
+        /// <param name="func">Function to run</param>
+        /// <param name="ttlInSeconds">Time to Live in seconds from now</param>
+        /// <param name="wantedResultToCache">this is used to determine the result you want to cache ie only if result is a http 200 and if service throws error don't cache that </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Run<T>(Func<T> func, int ttlInSeconds,Func<T,bool> wantedResultToCache = null)
         {
             var magicName = MagicName(Assembly.GetCallingAssembly().GetName().Name);
-            return Run(magicName, func, ttl, exp);
+            return Run(magicName, func, ttlInSeconds, wantedResultToCache);
         }
         
         private static string MagicName(string callingAssembly)
