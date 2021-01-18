@@ -2,8 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <AssemblyName>Mkb</AssemblyName>
-        <RootNamespace>Mkb</RootNamespace>
     </PropertyGroup>
 
 </Project>
