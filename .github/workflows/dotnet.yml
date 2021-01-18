@@ -30,3 +30,4 @@ jobs:
           PROJECT_FILE_PATH: Mkb.CacheItSimple/Mkb.CacheItSimple.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           PACKAGE_NAME: Mkb.SimpleCache
+          VERSION_STATIC: 1.0.1  
