@@ -24,9 +24,10 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Publish Mkb.SimpleCache
+    - name: publish on version change
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: Mkb.CacheItSimple/Mkb.CacheItSimple.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           PACKAGE_NAME: Mkb.SimpleCache
+          VERSION_FILE_PATH: version.xml 
